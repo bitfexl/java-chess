@@ -91,6 +91,34 @@ public class Board {
     }
 
     /**
+     * Copy the current board. Pieces and moves remain the same.
+     * @param other The board to copy to.
+     */
+    public void copyTo(Board other) {
+        for (int i=1; i<=8; i++) {
+            for (int j=1; j<=8; j++) {
+                other.set(i, j, get(i, j));
+            }
+        }
+
+        other.moveStack.clear();
+        other.moveStack.addAll(moveStack);
+
+        other.capturedPieces.clear();
+        other.capturedPieces.putAll(capturedPieces);
+    }
+
+    /**
+     * An array of all played moves.
+     * @return The already played moves on this board.
+     */
+    public Move[] getMoves() {
+        Move[] moves = new Move[moveStack.size()];
+        moveStack.copyInto(moves);
+        return moves;
+    }
+
+    /**
      * Get a piece.
      * @param file The file (1-8).
      * @param rank The rank (1-8).
