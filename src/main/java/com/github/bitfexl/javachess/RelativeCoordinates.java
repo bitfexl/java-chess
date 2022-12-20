@@ -1,5 +1,9 @@
 package com.github.bitfexl.javachess;
 
+/**
+ * Immutable relative coordinates to calculate
+ * the possible moves for a given piece.
+ */
 public class RelativeCoordinates {
     private final int xDelta;
     private final int yDelta;

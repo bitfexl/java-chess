@@ -8,6 +8,9 @@ import com.github.bitfexl.javachess.RelativeCoordinates;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A chess piece. Should be immutable/stateless.
+ */
 public abstract class Piece {
     private final Color color;
 

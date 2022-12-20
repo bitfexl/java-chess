@@ -1,5 +1,8 @@
 package com.github.bitfexl.javachess;
 
+/**
+ * A immutable move on the chess board.
+ */
 public class Move {
     private final int fromFile;
     private final int fromRank;
