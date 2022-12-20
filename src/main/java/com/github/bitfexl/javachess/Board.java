@@ -2,6 +2,10 @@ package com.github.bitfexl.javachess;
 
 import com.github.bitfexl.javachess.pieces.*;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+
 public class Board {
     /**
      * Checks if a number is between 1 and 8.
@@ -32,6 +36,11 @@ public class Board {
         }
     }
 
+    private Stack<Move> moveStack = new Stack<>();
+
+    // moveStack size after move and captured piece, if any
+    private Map<Integer, Piece> capturedPieces = new HashMap<>();
+
     public Board() {
         reset();
     }
@@ -56,7 +65,29 @@ public class Board {
 
         Piece captured = set(move.getToFile(), move.getToRank(), piece);
         set(move.getFromFile(), move.getFromRank(), null);
-        // todo: move history, undo
+
+        moveStack.push(move);
+        capturedPieces.put(moveStack.size(), captured);
+
+        // todo: special moves (promotion, castle)
+    }
+
+    /**
+     * Undo the last move.
+     * @return The move which has been undone or null -> initial position reached.
+     */
+    public Move undo() {
+        if (moveStack.isEmpty()) {
+            return null;
+        }
+
+        Piece capturedPiece = capturedPieces.get(moveStack.size());
+        Move move = moveStack.pop();
+
+        set(move.getFromFile(), move.getFromRank(), get(move.getToFile(), move.getToRank()));
+        set(move.getToFile(), move.getToRank(), capturedPiece);
+
+        return move;
     }
 
     /**
@@ -72,7 +103,7 @@ public class Board {
     }
 
     /**
-     * Place a piece.
+     * Place a piece. Does not affect history.
      * @param file The file (1-8).
      * @param rank The rank (1-8).
      * @param piece The piece.
@@ -114,6 +145,7 @@ public class Board {
         set(7, 8, new Knight(Color.BLACK));
         set(8, 8, new Rook(Color.BLACK));
 
-        // todo: reset move history
+        moveStack.clear();
+        capturedPieces.clear();
     }
 }
