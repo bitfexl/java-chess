@@ -7,25 +7,35 @@ public class Move {
     private final int toRank;
 
     public Move(int fromFile, int fromRank, int toFile, int toRank) {
-        check(fromFile);
-        check(fromRank);
-        check(toFile);
-        check(toRank);
+        Board.checkInBoundsException(fromFile);
+        Board.checkInBoundsException(fromRank);
+        Board.checkInBoundsException(toFile);
+        Board.checkInBoundsException(toRank);
         this.fromFile = fromFile;
         this.fromRank = fromRank;
         this.toFile = toFile;
         this.toRank = toRank;
     }
 
+    public int getFromFile() {
+        return fromFile;
+    }
+
+    public int getFromRank() {
+        return fromRank;
+    }
+
+    public int getToFile() {
+        return toFile;
+    }
+
+    public int getToRank() {
+        return toRank;
+    }
+
     @Override
     public String toString() {
         final String files = "abcdefgh";
         return "" + files.charAt(fromFile - 1) + fromRank + files.charAt(toFile - 1) + toRank;
-    }
-
-    private void check(int x) {
-        if (x < 1 || x > 8) {
-            throw new IllegalArgumentException("Rank and File must be in range 1 to 8.");
-        }
     }
 }

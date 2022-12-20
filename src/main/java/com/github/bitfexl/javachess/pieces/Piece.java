@@ -5,6 +5,7 @@ import com.github.bitfexl.javachess.Color;
 import com.github.bitfexl.javachess.Move;
 import com.github.bitfexl.javachess.RelativeCoordinates;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Piece {
@@ -23,20 +24,68 @@ public abstract class Piece {
      * Features a default implementation for Pieces
      * which use getPossibleMoves().
      * Can be overridden if more control is needed.
-     * Check needs to be checked (use checkCheck).
+     * Check needs to be checked (use checkOwnColor, checkCheck).
      * @param board The board to get the moves for.
+     * @param file The file (1-8) of the piece.
+     * @param rank The rank (1-8) of the piece.
      */
-    public void getValidMoves(Board board) {
-        // todo
-        getPossibleMoves();
+    public List<Move> getValidMoves(Board board, int file, int rank) {
+        List<Move> moves = getMoves(getPossibleMoves(), file, rank);
+        moves = checkOwnColor(moves, board);
+        moves = checkCheck(moves, board);
+        return moves;
+    }
+
+    /**
+     * Checks if a move is valid.
+     * @param possibleMoves The possible moves to check.
+     * @param file The file (1-8) of the piece.
+     * @param rank The rank (1-8) of the piece.
+     * @return All moves that are in bounds of the board.
+     */
+    protected List<Move> getMoves(List<RelativeCoordinates> possibleMoves, int file, int rank) {
+        Board.checkInBoundsException(file);
+        Board.checkInBoundsException(rank);
+
+        List<Move> moves = new ArrayList<>();
+
+        for (RelativeCoordinates c : possibleMoves) {
+            try {
+                Move move = c.toMove(file, rank);
+                moves.add(move);
+            } catch (IllegalArgumentException ex) {
+                // move out of bounds of board, do not add
+            }
+        }
+
+        return moves;
     }
 
     /**
      * Checks if a move is valid.
      * @param moves The moves to check.
+     * @param board The board to check.
+     * @return All moves for which the resulting square is not occupied by a piece of same color.
+     */
+    protected List<Move> checkOwnColor(List<Move> moves, Board board) {
+        List<Move> passedMoves = new ArrayList<>();
+
+        for (Move move : moves) {
+            if (board.get(move.getToFile(), move.getToRank()).getColor() != getColor()) {
+                passedMoves.add(move);
+            }
+        }
+
+        return passedMoves;
+    }
+
+    /**
+     * Checks if a move is valid.
+     * @param moves The moves to check.
+     * @param board The board to check.
      * @return All moves for which the resulting position is not a check.
      */
-    protected List<Move> checkCheck(List<Move> moves) {
+    protected List<Move> checkCheck(List<Move> moves, Board board) {
         // todo
         return moves;
     }
