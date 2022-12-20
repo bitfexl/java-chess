@@ -24,9 +24,14 @@ public class Pawn extends Piece {
             possibleMoves.add(new RelativeCoordinates(0, -2));
         }
 
+        List<Move> moves = getMoves(possibleMoves, file, rank);
+
+        // no forward capture
+        // todo: exception because toRank out of range (?)
+        moves = moves.stream().filter(m -> board.get(m.getToFile(), m.getToRank()) == null).toList();
+
         // todo: diagonal capture
 
-        List<Move> moves = getMoves(possibleMoves, file, rank);
         moves = checkOwnColor(moves, board);
         moves = checkCheck(moves, board);
         return moves;

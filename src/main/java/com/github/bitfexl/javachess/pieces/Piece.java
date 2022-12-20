@@ -89,7 +89,11 @@ public abstract class Piece {
      * @return All moves for which the resulting position is not a check.
      */
     protected List<Move> checkCheck(List<Move> moves, Board board) {
-        // todo
+        Board copy = new Board();
+        board.copyTo(copy);
+
+        // todo: cant detect check without detecting check
+
         return moves;
     }
 
