@@ -27,13 +27,51 @@ public class Pawn extends Piece {
         List<Move> moves = getMoves(possibleMoves, file, rank);
 
         // no forward capture
-        // todo: exception because toRank out of range (?)
         moves = moves.stream().filter(m -> board.get(m.getToFile(), m.getToRank()) == null).toList();
 
-        // todo: diagonal capture
+        // diagonal capture
+        List<Move> allMoves = getDiagonalMoves(board, file, rank);
+        allMoves.addAll(moves);
+        moves = allMoves;
 
         moves = checkLineOfSight(moves, board);
         moves = checkOwnColor(moves, board);
+        return moves;
+    }
+
+    private List<Move> getDiagonalMoves(Board board, int file, int rank) {
+        List<Move> moves = new ArrayList<>();
+
+        if (getColor() == Color.WHITE && rank+1 <= 8) {
+            if (file-1 > 0) {
+                Piece enemy = board.get(file-1, rank+1);
+                if (enemy != null && enemy.getColor() != getColor()) {
+                    moves.add(new Move(file, rank, file-1, rank+1));
+                }
+            }
+
+            if (file+1 <= 8) {
+                Piece enemy = board.get(file+1, rank+1);
+                if (enemy != null && enemy.getColor() != getColor()) {
+                    moves.add(new Move(file, rank, file+1, rank+1));
+                }
+            }
+        } else if (getColor() == Color.BLACK && rank-1 > 0) {
+            if (file-1 > 0) {
+                Piece enemy = board.get(file-1, rank-1);
+                if (enemy != null && enemy.getColor() != getColor()) {
+                    moves.add(new Move(file, rank, file-1, rank-1));
+                }
+            }
+
+            if (file+1 <= 8) {
+                Piece enemy = board.get(file+1, rank-1);
+                if (enemy != null && enemy.getColor() != getColor()) {
+                    moves.add(new Move(file, rank, file+1, rank-1));
+                }
+            }
+        }
+
         return moves;
     }
 
