@@ -130,10 +130,6 @@ public abstract class Piece {
      * @return All moves for which the resulting position is not a check.
      */
     protected List<Move> checkCheck(List<Move> moves, Board board) {
-        if (!board.isInCheck(getColor())) {
-            return moves;
-        }
-
         List<Move> passedMoves = new ArrayList<>();
 
         Board copy = new Board();
