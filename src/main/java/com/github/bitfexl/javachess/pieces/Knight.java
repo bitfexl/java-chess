@@ -1,6 +1,8 @@
 package com.github.bitfexl.javachess.pieces;
 
+import com.github.bitfexl.javachess.Board;
 import com.github.bitfexl.javachess.Color;
+import com.github.bitfexl.javachess.Move;
 import com.github.bitfexl.javachess.RelativeCoordinates;
 
 import java.util.List;
@@ -19,6 +21,15 @@ public class Knight extends Piece {
 
     public Knight(Color color) {
         super(color);
+    }
+
+    @Override
+    public List<Move> getValidMoves(Board board, int file, int rank) {
+        List<Move> moves = getMoves(getPossibleMoves(), file, rank);
+        // no line of sight checking
+        moves = checkOwnColor(moves, board);
+        moves = checkCheck(moves, board);
+        return moves;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.github.bitfexl.javachess.ui;
 
 import com.github.bitfexl.javachess.Board;
+import com.github.bitfexl.javachess.Move;
 import com.github.bitfexl.javachess.pieces.Piece;
 
 import javax.imageio.ImageIO;
@@ -29,7 +30,11 @@ public class ChessPanel extends JPanel implements MouseListener {
 
         chessPanel.setOnClick((file, rank) -> {
             chessPanel.clearMarkers();
-            chessPanel.setMarker(file, rank, new Marker[] {Marker.MOVE, Marker.CAPTURE, Marker.CHECK}[new Random().nextInt(3)]);
+
+            for (Move move : chessPanel.getChessBoard().get(file, rank).getValidMoves(chessPanel.getChessBoard(), file, rank)) {
+                chessPanel.setMarker(move.getToFile(), move.getToRank(), Marker.MOVE);
+            }
+
             chessPanel.repaint();
         });
 

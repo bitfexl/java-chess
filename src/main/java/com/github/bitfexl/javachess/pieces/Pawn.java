@@ -32,6 +32,7 @@ public class Pawn extends Piece {
 
         // todo: diagonal capture
 
+        moves = checkLineOfSight(moves, board);
         moves = checkOwnColor(moves, board);
         moves = checkCheck(moves, board);
         return moves;

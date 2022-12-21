@@ -7,6 +7,7 @@ import com.github.bitfexl.javachess.RelativeCoordinates;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A chess piece. Should be immutable/stateless.
@@ -43,6 +44,7 @@ public abstract class Piece {
      */
     public List<Move> getValidMoves(Board board, int file, int rank) {
         List<Move> moves = getMoves(getPossibleMoves(), file, rank);
+        moves = checkLineOfSight(moves, board);
         moves = checkOwnColor(moves, board);
         moves = checkCheck(moves, board);
         return moves;
@@ -73,6 +75,27 @@ public abstract class Piece {
         return moves;
     }
 
+    protected List<Move> checkLineOfSight(List<Move> moves, Board board) {
+        List<Move> passedMoves = new ArrayList<>();
+
+        nextMove: for (Move move : moves) {
+            int fileDelta = move.getToFile() - move.getFromFile();
+            int rankDelta = move.getToRank() - move.getFromRank();
+            int fileStep = (int)Math.signum(fileDelta);
+            int rankStep = (int)Math.signum(rankDelta);
+
+            for (int f=move.getFromFile()+fileStep, r=move.getFromRank()+rankStep; f != move.getToFile() || r != move.getToRank(); f+=fileStep, r+=rankStep) {
+                if (board.get(f, r) != null) {
+                    continue nextMove;
+                }
+            }
+
+            passedMoves.add(move);
+        }
+
+        return passedMoves;
+    }
+
     /**
      * Checks if a move is valid.
      * @param moves The moves to check.
@@ -83,7 +106,8 @@ public abstract class Piece {
         List<Move> passedMoves = new ArrayList<>();
 
         for (Move move : moves) {
-            if (board.get(move.getToFile(), move.getToRank()).getColor() != getColor()) {
+            Piece attackedPiece = board.get(move.getToFile(), move.getToRank());
+            if (attackedPiece == null || attackedPiece.getColor() != getColor()) {
                 passedMoves.add(move);
             }
         }

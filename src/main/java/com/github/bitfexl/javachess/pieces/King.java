@@ -28,7 +28,7 @@ public class King extends Piece {
 
     @Override
     protected List<RelativeCoordinates> getPossibleMoves() {
-        return null;
+        return MOVES;
     }
     // todo: castle
 }
