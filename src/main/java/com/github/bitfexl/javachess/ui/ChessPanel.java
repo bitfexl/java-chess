@@ -1,7 +1,6 @@
 package com.github.bitfexl.javachess.ui;
 
 import com.github.bitfexl.javachess.Board;
-import com.github.bitfexl.javachess.Move;
 import com.github.bitfexl.javachess.pieces.Piece;
 
 import javax.imageio.ImageIO;
@@ -13,36 +12,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.Random;
 
 public class ChessPanel extends JPanel implements MouseListener {
-    enum Marker {
+    public enum Marker {
         MOVE, CAPTURE, CHECK;
-    }
-
-    public static void main(String[] args) {
-        JFrame window = new JFrame("Test");
-        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        ChessPanel chessPanel = new ChessPanel();
-        chessPanel.getChessBoard().reset();
-        chessPanel.setBlackPov(false);
-
-        chessPanel.setOnClick((file, rank) -> {
-            chessPanel.clearMarkers();
-
-            for (Move move : chessPanel.getChessBoard().get(file, rank).getValidMoves(chessPanel.getChessBoard(), file, rank)) {
-                chessPanel.setMarker(move.getToFile(), move.getToRank(), Marker.MOVE);
-            }
-
-            chessPanel.repaint();
-        });
-
-        chessPanel.setPreferredSize(new Dimension(400, 400));
-        window.add(chessPanel);
-
-        window.pack();
-        window.setVisible(true);
     }
 
     private final Color COLOR_LIGHT = Color.LIGHT_GRAY;
