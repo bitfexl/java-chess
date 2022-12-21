@@ -13,7 +13,7 @@ public class Board {
      * @return true: in bounds, false: out of bounds;
      */
     public static boolean checkInBounds(int x) {
-        return x < 1 || x > 8;
+        return x >= 1 && x <= 8;
     }
 
     /**
