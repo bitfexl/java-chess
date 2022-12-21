@@ -7,7 +7,6 @@ import com.github.bitfexl.javachess.RelativeCoordinates;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A chess piece. Should be immutable/stateless.
@@ -37,7 +36,7 @@ public abstract class Piece {
      * Features a default implementation for Pieces
      * which use getPossibleMoves().
      * Can be overridden if more control is needed.
-     * Check needs to be checked (use checkOwnColor, checkCheck).
+     * Check needs to be checked using getTrueValidMoves().
      * @param board The board to get the moves for.
      * @param file The file (1-8) of the piece.
      * @param rank The rank (1-8) of the piece.
@@ -46,6 +45,15 @@ public abstract class Piece {
         List<Move> moves = getMoves(getPossibleMoves(), file, rank);
         moves = checkLineOfSight(moves, board);
         moves = checkOwnColor(moves, board);
+        return moves;
+    }
+
+    /**
+     * Same as getValidMoves() but also checks checks.
+     * Uses getValidMoves() internally.
+     */
+    public List<Move> getTrueValidMoves(Board board, int file, int rank) {
+        List<Move> moves = getValidMoves(board, file, rank);
         moves = checkCheck(moves, board);
         return moves;
     }
@@ -122,12 +130,24 @@ public abstract class Piece {
      * @return All moves for which the resulting position is not a check.
      */
     protected List<Move> checkCheck(List<Move> moves, Board board) {
+        if (!board.isInCheck(getColor())) {
+            return moves;
+        }
+
+        List<Move> passedMoves = new ArrayList<>();
+
         Board copy = new Board();
         board.copyTo(copy);
 
-        // todo: cant detect check without detecting check
+        for (Move move : moves) {
+            copy.move(move);
+            if (!copy.isInCheck(getColor())) {
+                passedMoves.add(move);
+            }
+            copy.undo();
+        }
 
-        return moves;
+        return passedMoves;
     }
 
     /**

@@ -52,6 +52,31 @@ public class Board {
     }
 
     /**
+     * Checks if a player currently is in check.
+     * @param color The player to check.
+     * @return true: in check or checkmate, false: not in check;
+     */
+    public boolean isInCheck(Color color) {
+        for (int f=1; f<=8; f++) {
+            for (int r=1; r<=8; r++) {
+                Piece piece = get(f, r);
+                if (piece == null || piece.getColor() == color) {
+                    continue;
+                }
+
+                for (Move move : piece.getValidMoves(this, f, r)) {
+                    Piece king = get(move.getToFile(), move.getToRank());
+                    if (king instanceof King && king.getColor() == color) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Play a move. Does not get played
      * if the piece at the starting pos in null.
      * Does not check for check or check mate.

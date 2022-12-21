@@ -34,7 +34,6 @@ public class Pawn extends Piece {
 
         moves = checkLineOfSight(moves, board);
         moves = checkOwnColor(moves, board);
-        moves = checkCheck(moves, board);
         return moves;
     }
 

@@ -28,7 +28,6 @@ public class Knight extends Piece {
         List<Move> moves = getMoves(getPossibleMoves(), file, rank);
         // no line of sight checking
         moves = checkOwnColor(moves, board);
-        moves = checkCheck(moves, board);
         return moves;
     }
 

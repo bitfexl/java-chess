@@ -55,7 +55,7 @@ public class JavaChess {
 
         if (clickedPiece != null) {
             // display possible moves
-            moves = clickedPiece.getValidMoves(board, file, rank);
+            moves = clickedPiece.getTrueValidMoves(board, file, rank);
             for (Move move : moves) {
                 ChessPanel.Marker marker;
                 if (board.get(move.getToFile(), move.getToRank()) != null) {
