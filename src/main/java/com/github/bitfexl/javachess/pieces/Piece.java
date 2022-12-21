@@ -23,6 +23,15 @@ public abstract class Piece {
     }
 
     /**
+     * The piece id. Should be color_piecename, all lowercase.
+     * Default implementation returns color_class.getSimpleName()
+     * @return The unique piece id as a string.
+     */
+    public String getId() {
+        return (color.toString() + "_" + getClass().getSimpleName()).toLowerCase();
+    }
+
+    /**
      * Get the possible moves for a board.
      * Features a default implementation for Pieces
      * which use getPossibleMoves().
