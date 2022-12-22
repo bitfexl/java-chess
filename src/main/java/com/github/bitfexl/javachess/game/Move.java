@@ -9,6 +9,13 @@ public class Move {
     private final int toFile;
     private final int toRank;
 
+    public Move(Coordinates from, Coordinates to) {
+        this.fromFile = from.getFile();
+        this.fromRank = from.getRank();
+        this.toFile = to.getFile();
+        this.toRank = to.getRank();
+    }
+
     public Move(int fromFile, int fromRank, int toFile, int toRank) {
         Board.checkInBoundsException(fromFile);
         Board.checkInBoundsException(fromRank);

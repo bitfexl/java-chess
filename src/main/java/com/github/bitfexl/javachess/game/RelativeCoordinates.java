@@ -18,6 +18,10 @@ public class RelativeCoordinates {
         this.yDelta = yDelta;
     }
 
+    public Move toMove(Coordinates from) {
+        return new Move(from, new Coordinates(from.getFile() + xDelta, from.getRank() + yDelta));
+    }
+
     public Move toMove(int fromFile, int fromRank) {
         return new Move(fromFile, fromRank, fromFile + xDelta, fromRank + yDelta);
     }
