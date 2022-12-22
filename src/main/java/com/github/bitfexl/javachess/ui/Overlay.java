@@ -4,9 +4,7 @@ import java.awt.*;
 
 /**
  * An overlay for the chess panel.
- * Can also implement ClickListener
- * to listen for click events while
- * the overlay is active.
+ * Receives all click events while dialog is active.
  */
 public interface Overlay {
     /**
@@ -15,4 +13,12 @@ public interface Overlay {
      * @param g2d The graphics to draw on.
      */
     void render(ChessPanel panel, Graphics2D g2d);
+
+    /**
+     * Called when the ChessPanel is clicked.
+     * @param panel The clicked panel.
+     * @param x The x coordinate.
+     * @param y The y coordinate (swing coordinates).
+     */
+    void clicked(ChessPanel panel, int x, int y);
 }

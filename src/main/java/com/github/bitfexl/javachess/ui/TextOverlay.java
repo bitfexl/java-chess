@@ -54,4 +54,7 @@ public class TextOverlay implements Overlay {
         }
         return newFont;
     }
+
+    @Override
+    public void clicked(ChessPanel panel, int x, int y) { }
 }

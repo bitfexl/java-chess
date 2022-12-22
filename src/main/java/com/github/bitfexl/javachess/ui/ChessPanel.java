@@ -169,7 +169,12 @@ public class ChessPanel extends JPanel implements MouseListener {
         g2d.setColor(oldColor);
     }
 
-    private BufferedImage getPiece(Piece piece) {
+    /**
+     * Get or load a piece icon.
+     * @param piece The piece to get.
+     * @return The image, can throw an exception.
+     */
+    public BufferedImage getPiece(Piece piece) {
         if (!pieces.containsKey(piece.getId())) {
             pieces.put(piece.getId(), loadPiece(piece));
         }
@@ -196,8 +201,8 @@ public class ChessPanel extends JPanel implements MouseListener {
             int rank = isBlackPov() ? row + 1 : 8 - row;
             int file = isBlackPov() ? 8 - col : col + 1;
 
-            if (overlay instanceof ClickListener ocl) {
-                ocl.clicked(file, rank);
+            if (overlay != null) {
+                overlay.clicked(this, e.getX(), e.getY());
             } else if (onClick != null) {
                 onClick.clicked(file, rank);
             }

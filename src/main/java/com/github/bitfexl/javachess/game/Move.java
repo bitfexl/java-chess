@@ -43,6 +43,16 @@ public class Move {
         return toRank;
     }
 
+    /**
+     * Check if move qualifies for promotion.
+     * Piece (pawn) needs to be checked manually.
+     * @param color The color of the piece to check for.
+     * @return true: promotion, false: no promotion;
+     */
+    public boolean qualifiedPromotion(Color color) {
+        return (color == Color.WHITE && toRank == 8) || (color == Color.BLACK && toRank == 1);
+    }
+
     @Override
     public String toString() {
         final String files = "abcdefgh";

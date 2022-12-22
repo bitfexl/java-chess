@@ -117,13 +117,17 @@ public class Board {
             return;
         }
 
+        if (move instanceof PromotionMove pMove) {
+            piece = pMove.getPiece();
+        }
+
         Piece captured = set(move.getToFile(), move.getToRank(), piece);
         set(move.getFromFile(), move.getFromRank(), null);
 
         moveStack.push(move);
         capturedPieces.put(moveStack.size(), captured);
 
-        // todo: special moves (promotion, castle)
+        // todo: special moves (castle)
     }
 
     /**
@@ -138,7 +142,13 @@ public class Board {
         Piece capturedPiece = capturedPieces.get(moveStack.size());
         Move move = moveStack.pop();
 
-        set(move.getFromFile(), move.getFromRank(), get(move.getToFile(), move.getToRank()));
+        Piece piece = get(move.getToFile(), move.getToRank());
+
+        if (move instanceof PromotionMove) {
+            piece = new Pawn(piece.getColor());
+        }
+
+        set(move.getFromFile(), move.getFromRank(), piece);
         set(move.getToFile(), move.getToRank(), capturedPiece);
 
         return move;

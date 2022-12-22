@@ -1,12 +1,12 @@
 package com.github.bitfexl.javachess;
 
-import com.github.bitfexl.javachess.game.Board;
 import com.github.bitfexl.javachess.game.Color;
-import com.github.bitfexl.javachess.game.Coordinates;
-import com.github.bitfexl.javachess.game.Move;
+import com.github.bitfexl.javachess.game.*;
 import com.github.bitfexl.javachess.pieces.King;
+import com.github.bitfexl.javachess.pieces.Pawn;
 import com.github.bitfexl.javachess.pieces.Piece;
 import com.github.bitfexl.javachess.ui.ChessPanel;
+import com.github.bitfexl.javachess.ui.PromotionOverlay;
 import com.github.bitfexl.javachess.ui.TextOverlay;
 
 import javax.swing.*;
@@ -20,6 +20,8 @@ public class JavaChess {
     }
 
     private final Dimension BTN_DIMENSION = new Dimension(100, 20);
+
+    private Piece selectedPiece;
 
     private List<Move> moves;
 
@@ -88,11 +90,13 @@ public class JavaChess {
 
         boolean moved = false;
 
+        // move
         if (moves != null) {
-            // move
             Move move = moveTo(file, rank);
             if (move != null) {
-                board.move(move);
+                if (!handlePromotion(move)) {
+                    board.move(move);
+                }
                 moved = true;
                 nextPlayer = nextPlayer.opponent();
             }
@@ -101,20 +105,29 @@ public class JavaChess {
 
         // get possible moves
         if (!moved && clickedPiece != null && clickedPiece.getColor() == nextPlayer) {
+            selectedPiece = clickedPiece;
             moves = clickedPiece.getTrueValidMoves(board, new Coordinates(file, rank));
             chessPanel.setMarker(file, rank, ChessPanel.Marker.SELECTED);
         }
 
-        displayMoves();
-        displayCheck();
+        postMove();
+    }
 
-        if (board.isCheckMate(nextPlayer)) {
-            chessPanel.setOverlay(new TextOverlay("Game Over! " + nextPlayer.opponent() + " won!"));
-        } else if (board.isStaleMate(nextPlayer)) {
-            chessPanel.setOverlay(new TextOverlay("Game Over! Stalemate!"));
+    private boolean handlePromotion(Move move) {
+        if (!(selectedPiece instanceof Pawn) || !move.qualifiedPromotion(selectedPiece.getColor())) {
+            return false;
         }
 
-        updateGui();
+        chessPanel.setOverlay(new PromotionOverlay(selectedPiece.getColor()) {
+            @Override
+            protected void pieceSelected(Piece piece) {
+                chessPanel.setOverlay(null);
+                board.move(new PromotionMove(move, piece));
+                postMove();
+            }
+        });
+
+        return true;
     }
 
     private Move moveTo(int file, int rank) {
@@ -129,6 +142,19 @@ public class JavaChess {
         }
 
         return null;
+    }
+
+    private void postMove() {
+        displayMoves();
+        displayCheck();
+
+        if (board.isCheckMate(nextPlayer)) {
+            chessPanel.setOverlay(new TextOverlay("Game Over! " + nextPlayer.opponent() + " won!"));
+        } else if (board.isStaleMate(nextPlayer)) {
+            chessPanel.setOverlay(new TextOverlay("Game Over! Stalemate!"));
+        }
+
+        updateGui();
     }
 
     private void displayCheck() {
