@@ -75,9 +75,22 @@ public class Board {
      * @return true: checkmate, false: not checkmate;
      */
     public boolean isCheckMate(Color color) {
-        return getCoordinates(Piece.class, color).stream()
+        return isInCheck(color) && getCoordinates(Piece.class, color).stream()
                 .map(c -> board.get(c).getTrueValidMoves(this, c).size())
                 .reduce(0, Integer::sum) == 0;
+    }
+
+    /**
+     * Checks if game ended in stalemate.
+     * @param nextPlayer The player to move next.
+     * @return true: nextPlayer has no valid moves and is not in check -> stalemate,
+     *         false: nextPlayer has valid moves or is in check/checkmate;
+     */
+    public boolean isStaleMate(Color nextPlayer) {
+        return !isInCheck(nextPlayer) && getCoordinates(Piece.class, nextPlayer).stream()
+                .map(c -> board.get(c).getTrueValidMoves(this, c).size())
+                .reduce(0, Integer::sum) == 0;
+
     }
 
     /**

@@ -73,6 +73,8 @@ public class JavaChess {
 
         if (board.isCheckMate(nextPlayer)) {
             chessPanel.setOverlay(new TextOverlay("Game Over! " + nextPlayer.opponent() + " won!"));
+        } else if (board.isStaleMate(nextPlayer)) {
+            chessPanel.setOverlay(new TextOverlay("Game Over! Stalemate!"));
         }
 
         updateGui();
