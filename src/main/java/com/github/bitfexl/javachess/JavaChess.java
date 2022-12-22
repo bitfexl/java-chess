@@ -4,6 +4,7 @@ import com.github.bitfexl.javachess.game.Board;
 import com.github.bitfexl.javachess.game.Color;
 import com.github.bitfexl.javachess.game.Coordinates;
 import com.github.bitfexl.javachess.game.Move;
+import com.github.bitfexl.javachess.pieces.King;
 import com.github.bitfexl.javachess.pieces.Piece;
 import com.github.bitfexl.javachess.ui.ChessPanel;
 import com.github.bitfexl.javachess.ui.TextOverlay;
@@ -69,6 +70,7 @@ public class JavaChess {
         }
 
         displayMoves();
+        displayCheck();
 
         updateGui();
     }
@@ -85,6 +87,22 @@ public class JavaChess {
         }
 
         return null;
+    }
+
+    private void displayCheck() {
+        if (board.isInCheck(Color.WHITE)) {
+            Coordinates whiteKing = board.getCoordinates(King.class, Color.WHITE).iterator().next();
+            chessPanel.setMarker(whiteKing.getFile(), whiteKing.getRank(), ChessPanel.Marker.CHECK);
+        }
+
+        if (board.isInCheck(Color.BLACK)) {
+            Coordinates whiteKing = board.getCoordinates(King.class, Color.BLACK).iterator().next();
+            chessPanel.setMarker(whiteKing.getFile(), whiteKing.getRank(), ChessPanel.Marker.CHECK);
+        }
+
+        // NoSuchElementException should not be thrown,
+        // because you should not be able to do a move that
+        // would allow your opponent to capture your king.
     }
 
     private void displayMoves() {

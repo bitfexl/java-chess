@@ -4,7 +4,9 @@ import com.github.bitfexl.javachess.pieces.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class Board {
     /**
@@ -65,6 +67,18 @@ public class Board {
         }
 
         return false;
+    }
+
+    /**
+     * Get all pieces that match a given criteria.
+     * @param pieceType The piece type to get.
+     * @param color The color of the piece.
+     * @return A set of coordinates of the matching pieces, may be empty set.
+     */
+    public Set<Coordinates> getCoordinates(Class<? extends Piece> pieceType, Color color) {
+        return board.keySet().stream()
+                .filter(c -> get(c).getClass() == pieceType && get(c).getColor() == color)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     /**
