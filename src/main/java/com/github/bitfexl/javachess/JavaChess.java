@@ -66,6 +66,7 @@ public class JavaChess {
         // get possible moves
         if (!moved && clickedPiece != null && clickedPiece.getColor() == nextPlayer) {
             moves = clickedPiece.getTrueValidMoves(board, new Coordinates(file, rank));
+            chessPanel.setMarker(file, rank, ChessPanel.Marker.SELECTED);
         }
 
         displayMoves();

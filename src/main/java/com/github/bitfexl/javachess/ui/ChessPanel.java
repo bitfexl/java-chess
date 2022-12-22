@@ -15,13 +15,14 @@ import java.util.Objects;
 
 public class ChessPanel extends JPanel implements MouseListener {
     public enum Marker {
-        MOVE, CAPTURE, CHECK;
+        MOVE, CAPTURE, CHECK, SELECTED;
     }
 
     private final Color COLOR_LIGHT = Color.LIGHT_GRAY;
     private final Color COLOR_DARK = Color.GRAY;
     private final Color COLOR_MARKING = new Color(0, 100, 0, 80);
     private final Color COLOR_CHECK = new Color(150, 0, 0, 80);
+    private final Color COLOR_SELECTED = new Color(0, 0, 150, 80);
 
     private final String SET_NAME = "standard";
 
@@ -154,8 +155,8 @@ public class ChessPanel extends JPanel implements MouseListener {
 
         final Color oldColor = g2d.getColor();
 
-        if (type == Marker.CAPTURE || type == Marker.CHECK) {
-            g2d.setColor(type == Marker.CHECK ? COLOR_CHECK : COLOR_MARKING);
+        if (type == Marker.CAPTURE || type == Marker.CHECK || type == Marker.SELECTED) {
+            g2d.setColor(type == Marker.CHECK ? COLOR_CHECK : type == Marker.SELECTED ? COLOR_SELECTED : COLOR_MARKING);
             g2d.fillRect(sqX, sqY, sqWidth, sqHeight);
             g2d.setColor(oldColor);
             g2d.fillRect(sqX + CAPTURE_WIDTH, sqY + CAPTURE_WIDTH, sqWidth - CAPTURE_WIDTH * 2, sqHeight - CAPTURE_WIDTH * 2);
