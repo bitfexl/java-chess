@@ -2,6 +2,7 @@ package com.github.bitfexl.javachess;
 
 import com.github.bitfexl.javachess.game.Board;
 import com.github.bitfexl.javachess.game.Color;
+import com.github.bitfexl.javachess.game.Coordinates;
 import com.github.bitfexl.javachess.game.Move;
 import com.github.bitfexl.javachess.pieces.Piece;
 import com.github.bitfexl.javachess.ui.ChessPanel;
@@ -64,7 +65,7 @@ public class JavaChess {
 
         // get possible moves
         if (!moved && clickedPiece != null && clickedPiece.getColor() == nextPlayer) {
-            moves = clickedPiece.getTrueValidMoves(board, file, rank);
+            moves = clickedPiece.getTrueValidMoves(board, new Coordinates(file, rank));
         }
 
         displayMoves();

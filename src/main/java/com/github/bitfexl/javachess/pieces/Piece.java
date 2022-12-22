@@ -1,9 +1,6 @@
 package com.github.bitfexl.javachess.pieces;
 
-import com.github.bitfexl.javachess.game.Board;
-import com.github.bitfexl.javachess.game.Color;
-import com.github.bitfexl.javachess.game.Move;
-import com.github.bitfexl.javachess.game.RelativeCoordinates;
+import com.github.bitfexl.javachess.game.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +35,10 @@ public abstract class Piece {
      * Can be overridden if more control is needed.
      * Check needs to be checked using getTrueValidMoves().
      * @param board The board to get the moves for.
-     * @param file The file (1-8) of the piece.
-     * @param rank The rank (1-8) of the piece.
+     * @param coordinates The coordinates of the piece.
      */
-    public List<Move> getValidMoves(Board board, int file, int rank) {
-        List<Move> moves = getMoves(getPossibleMoves(), file, rank);
+    public List<Move> getValidMoves(Board board, Coordinates coordinates) {
+        List<Move> moves = getMoves(getPossibleMoves(), coordinates);
         moves = checkLineOfSight(moves, board);
         moves = checkOwnColor(moves, board);
         return moves;
@@ -52,8 +48,8 @@ public abstract class Piece {
      * Same as getValidMoves() but also checks checks.
      * Uses getValidMoves() internally.
      */
-    public List<Move> getTrueValidMoves(Board board, int file, int rank) {
-        List<Move> moves = getValidMoves(board, file, rank);
+    public List<Move> getTrueValidMoves(Board board, Coordinates coordinates) {
+        List<Move> moves = getValidMoves(board, coordinates);
         moves = checkCheck(moves, board);
         return moves;
     }
@@ -61,19 +57,15 @@ public abstract class Piece {
     /**
      * Checks if a move is valid.
      * @param possibleMoves The possible moves to check.
-     * @param file The file (1-8) of the piece.
-     * @param rank The rank (1-8) of the piece.
+     * @param coordinates The coordinates of the piece.
      * @return All moves that are in bounds of the board.
      */
-    protected List<Move> getMoves(List<RelativeCoordinates> possibleMoves, int file, int rank) {
-        Board.checkInBoundsException(file);
-        Board.checkInBoundsException(rank);
-
+    protected List<Move> getMoves(List<RelativeCoordinates> possibleMoves, Coordinates coordinates) {
         List<Move> moves = new ArrayList<>();
 
         for (RelativeCoordinates c : possibleMoves) {
             try {
-                Move move = c.toMove(file, rank);
+                Move move = c.toMove(coordinates);
                 moves.add(move);
             } catch (IllegalArgumentException ex) {
                 // move out of bounds of board, do not add

@@ -64,7 +64,8 @@ public class Board {
                     continue;
                 }
 
-                for (Move move : piece.getValidMoves(this, f, r)) {
+                // todo: switch to coordinates completely
+                for (Move move : piece.getValidMoves(this, new Coordinates(f, r))) {
                     Piece king = get(move.getToFile(), move.getToRank());
                     if (king instanceof King && king.getColor() == color) {
                         return true;

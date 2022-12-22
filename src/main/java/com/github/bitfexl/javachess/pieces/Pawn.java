@@ -1,9 +1,6 @@
 package com.github.bitfexl.javachess.pieces;
 
-import com.github.bitfexl.javachess.game.Board;
-import com.github.bitfexl.javachess.game.Color;
-import com.github.bitfexl.javachess.game.Move;
-import com.github.bitfexl.javachess.game.RelativeCoordinates;
+import com.github.bitfexl.javachess.game.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,23 +11,23 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Move> getValidMoves(Board board, int file, int rank) {
+    public List<Move> getValidMoves(Board board, Coordinates coordinates) {
         List<RelativeCoordinates> possibleMoves = new ArrayList<>(getPossibleMoves());
 
         // first move
-        if (getColor() == Color.WHITE && rank == 2) {
+        if (getColor() == Color.WHITE && coordinates.getRank() == 2) {
             possibleMoves.add(new RelativeCoordinates(0, 2));
-        } else if (getColor() == Color.BLACK && rank == 7) {
+        } else if (getColor() == Color.BLACK && coordinates.getRank() == 7) {
             possibleMoves.add(new RelativeCoordinates(0, -2));
         }
 
-        List<Move> moves = getMoves(possibleMoves, file, rank);
+        List<Move> moves = getMoves(possibleMoves, coordinates);
 
         // no forward capture
         moves = moves.stream().filter(m -> board.get(m.getToFile(), m.getToRank()) == null).toList();
 
         // diagonal capture
-        List<Move> allMoves = getDiagonalMoves(board, file, rank);
+        List<Move> allMoves = getDiagonalMoves(board, coordinates.getFile(), coordinates.getRank());
         allMoves.addAll(moves);
         moves = allMoves;
 
