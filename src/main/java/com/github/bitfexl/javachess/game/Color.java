@@ -1,4 +1,4 @@
-package com.github.bitfexl.javachess;
+package com.github.bitfexl.javachess.game;
 
 public enum Color {
     BLACK, WHITE;

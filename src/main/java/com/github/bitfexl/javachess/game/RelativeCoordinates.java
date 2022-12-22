@@ -1,4 +1,4 @@
-package com.github.bitfexl.javachess;
+package com.github.bitfexl.javachess.game;
 
 /**
  * Immutable relative coordinates to calculate

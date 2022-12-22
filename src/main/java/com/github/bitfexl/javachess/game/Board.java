@@ -1,4 +1,4 @@
-package com.github.bitfexl.javachess;
+package com.github.bitfexl.javachess.game;
 
 import com.github.bitfexl.javachess.pieces.*;
 

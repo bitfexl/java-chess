@@ -1,6 +1,6 @@
 package com.github.bitfexl.javachess.ui;
 
-import com.github.bitfexl.javachess.Board;
+import com.github.bitfexl.javachess.game.Board;
 import com.github.bitfexl.javachess.pieces.Piece;
 
 import javax.imageio.ImageIO;

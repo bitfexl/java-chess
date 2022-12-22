@@ -1,5 +1,8 @@
 package com.github.bitfexl.javachess;
 
+import com.github.bitfexl.javachess.game.Board;
+import com.github.bitfexl.javachess.game.Color;
+import com.github.bitfexl.javachess.game.Move;
 import com.github.bitfexl.javachess.pieces.Piece;
 import com.github.bitfexl.javachess.ui.ChessPanel;
 import com.github.bitfexl.javachess.ui.TextOverlay;
@@ -20,7 +23,7 @@ public class JavaChess {
 
     private ChessPanel chessPanel;
 
-    private Color nextPlayer;
+    private com.github.bitfexl.javachess.game.Color nextPlayer;
 
     public void run() {
         JFrame window = new JFrame("Test");

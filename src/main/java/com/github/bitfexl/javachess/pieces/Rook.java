@@ -1,7 +1,7 @@
 package com.github.bitfexl.javachess.pieces;
 
-import com.github.bitfexl.javachess.Color;
-import com.github.bitfexl.javachess.RelativeCoordinates;
+import com.github.bitfexl.javachess.game.Color;
+import com.github.bitfexl.javachess.game.RelativeCoordinates;
 
 import java.util.List;
 
