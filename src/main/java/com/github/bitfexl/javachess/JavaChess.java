@@ -19,6 +19,8 @@ public class JavaChess {
         new JavaChess().run();
     }
 
+    private final Dimension BTN_DIMENSION = new Dimension(100, 20);
+
     private List<Move> moves;
 
     private final Board board = new Board();
@@ -30,19 +32,53 @@ public class JavaChess {
     public void run() {
         JFrame window = new JFrame("Test");
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        window.setLayout(new BoxLayout(window.getContentPane(), BoxLayout.Y_AXIS));
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+
+        Button btnUndo = new Button("Undo");
+        btnUndo.setMaximumSize(BTN_DIMENSION);
+        btnUndo.addActionListener(e -> {
+            if (board.undo() != null) {
+                nextPlayer = nextPlayer.opponent();
+            }
+            clearGui();
+        });
+        buttonPanel.add(btnUndo);
+
+        Button btnReset = new Button("Reset");
+        btnReset.setMaximumSize(BTN_DIMENSION);
+        btnReset.addActionListener(e -> {
+            newGame();
+        });
+        buttonPanel.add(btnReset);
+
+        Button btnTurnBoard = new Button("Turn Board");
+        btnTurnBoard.setMaximumSize(BTN_DIMENSION);
+        btnTurnBoard.addActionListener(e -> {
+            chessPanel.setBlackPov(!chessPanel.isBlackPov());
+        });
+        buttonPanel.add(btnTurnBoard);
 
         chessPanel = new ChessPanel();
         chessPanel.setOnClick(this::onClick);
-        chessPanel.getChessBoard().reset();
-        chessPanel.setBlackPov(false);
-
-        nextPlayer = Color.WHITE;
-
         chessPanel.setPreferredSize(new Dimension(400, 400));
+
+        newGame();
+
+        window.add(buttonPanel);
         window.add(chessPanel);
 
         window.pack();
         window.setVisible(true);
+    }
+
+    private void newGame() {
+        board.reset();
+        nextPlayer = Color.WHITE;
+        chessPanel.setBlackPov(false);
+        clearGui();
     }
 
     private void onClick(int file, int rank) {
@@ -121,6 +157,12 @@ public class JavaChess {
             }
             chessPanel.setMarker(move.getToFile(), move.getToRank(), marker);
         }
+    }
+
+    private void clearGui() {
+        chessPanel.clearMarkers();
+        chessPanel.setOverlay(null);
+        updateGui();
     }
 
     private void updateGui() {

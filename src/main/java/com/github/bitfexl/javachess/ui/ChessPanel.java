@@ -63,6 +63,7 @@ public class ChessPanel extends JPanel implements MouseListener {
 
     public void setBlackPov(boolean blackPov) {
         this.blackPov = blackPov;
+        repaint();
     }
 
     public void setOnClick(ClickListener onClick) {
