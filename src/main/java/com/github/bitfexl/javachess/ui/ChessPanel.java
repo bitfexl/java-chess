@@ -35,6 +35,8 @@ public class ChessPanel extends JPanel implements MouseListener {
      */
     private ClickListener onClick;
 
+    private Overlay overlay;
+
     // row * 1000 + col
     private final HashMap<Integer, Marker> markings = new HashMap<>();
 
@@ -64,6 +66,16 @@ public class ChessPanel extends JPanel implements MouseListener {
 
     public void setOnClick(ClickListener onClick) {
         this.onClick = onClick;
+    }
+
+    public void setOverlay(Overlay overlay) {
+        this.overlay = overlay;
+        repaint();
+    }
+
+    public void removeOverlay() {
+        this.overlay = null;
+        repaint();
     }
 
     /**
@@ -124,6 +136,12 @@ public class ChessPanel extends JPanel implements MouseListener {
                     g2d.drawImage(getPiece(piece), sqX, sqY, sqWidth, sqHeight, null);
                 }
 
+                if (overlay != null) {
+                    Color oldColor = g2d.getColor();
+                    overlay.render(this, g2d);
+                    g2d.setColor(oldColor);
+                }
+
                 g2d.setColor(g2d.getColor() == COLOR_DARK ? COLOR_LIGHT : COLOR_DARK);
             }
             g2d.setColor(g2d.getColor() == COLOR_DARK ? COLOR_LIGHT : COLOR_DARK);
@@ -176,7 +194,9 @@ public class ChessPanel extends JPanel implements MouseListener {
             int rank = isBlackPov() ? row + 1 : 8 - row;
             int file = isBlackPov() ? 8 - col : col + 1;
 
-            if (onClick != null) {
+            if (overlay instanceof ClickListener ocl) {
+                ocl.clicked(file, rank);
+            } else if (onClick != null) {
                 onClick.clicked(file, rank);
             }
         }

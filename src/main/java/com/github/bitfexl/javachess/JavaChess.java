@@ -2,6 +2,7 @@ package com.github.bitfexl.javachess;
 
 import com.github.bitfexl.javachess.pieces.Piece;
 import com.github.bitfexl.javachess.ui.ChessPanel;
+import com.github.bitfexl.javachess.ui.TextOverlay;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +29,7 @@ public class JavaChess {
         chessPanel.setOnClick(this::onClick);
         chessPanel.getChessBoard().reset();
         chessPanel.setBlackPov(false);
+        chessPanel.setOverlay(new TextOverlay("Hello, World!"));
 
         chessPanel.setPreferredSize(new Dimension(400, 400));
         window.add(chessPanel);
