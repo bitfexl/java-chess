@@ -37,7 +37,7 @@ public class JavaChess {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
-        Button btnUndo = new Button("Undo");
+        JButton btnUndo = new JButton("Undo");
         btnUndo.setMaximumSize(BTN_DIMENSION);
         btnUndo.addActionListener(e -> {
             if (board.undo() != null) {
@@ -47,14 +47,14 @@ public class JavaChess {
         });
         buttonPanel.add(btnUndo);
 
-        Button btnReset = new Button("Reset");
+        JButton btnReset = new JButton("Reset");
         btnReset.setMaximumSize(BTN_DIMENSION);
         btnReset.addActionListener(e -> {
             newGame();
         });
         buttonPanel.add(btnReset);
 
-        Button btnTurnBoard = new Button("Turn Board");
+        JButton btnTurnBoard = new JButton("Turn Board");
         btnTurnBoard.setMaximumSize(BTN_DIMENSION);
         btnTurnBoard.addActionListener(e -> {
             chessPanel.setBlackPov(!chessPanel.isBlackPov());
