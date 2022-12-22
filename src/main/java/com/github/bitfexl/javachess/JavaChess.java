@@ -20,6 +20,8 @@ public class JavaChess {
 
     private ChessPanel chessPanel;
 
+    private Color nextPlayer;
+
     public void run() {
         JFrame window = new JFrame("Test");
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -29,6 +31,8 @@ public class JavaChess {
         chessPanel.getChessBoard().reset();
         chessPanel.setBlackPov(false);
         chessPanel.setOverlay(new TextOverlay("Hello, World!"));
+
+        nextPlayer = Color.WHITE;
 
         chessPanel.setPreferredSize(new Dimension(400, 400));
         window.add(chessPanel);
@@ -50,12 +54,13 @@ public class JavaChess {
             if (move != null) {
                 board.move(move);
                 moved = true;
+                nextPlayer = nextPlayer.opponent();
             }
             moves = null;
         }
 
         // get possible moves
-        if (!moved && clickedPiece != null) {
+        if (!moved && clickedPiece != null && clickedPiece.getColor() == nextPlayer) {
             moves = clickedPiece.getTrueValidMoves(board, file, rank);
         }
 
