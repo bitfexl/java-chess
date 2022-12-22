@@ -7,13 +7,12 @@ import com.github.bitfexl.javachess.ui.TextOverlay;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 
 public class JavaChess {
     public static void main(String[] args) {
         new JavaChess().run();
     }
-
-    private Piece selectedPiece;
 
     private List<Move> moves;
 
@@ -43,33 +42,25 @@ public class JavaChess {
 
         chessPanel.clearMarkers();
 
+        boolean moved = false;
 
-        if (selectedPiece != null) {
+        if (moves != null) {
             // move
             Move move = moveTo(file, rank);
             if (move != null) {
                 board.move(move);
-                selectedPiece = null;
-                updateGui();
-                return;
+                moved = true;
             }
+            moves = null;
         }
 
-        if (clickedPiece != null) {
-            // display possible moves
+        // get possible moves
+        if (!moved && clickedPiece != null) {
             moves = clickedPiece.getTrueValidMoves(board, file, rank);
-            for (Move move : moves) {
-                ChessPanel.Marker marker;
-                if (board.get(move.getToFile(), move.getToRank()) != null) {
-                    marker = ChessPanel.Marker.CAPTURE;
-                } else {
-                    marker = ChessPanel.Marker.MOVE;
-                }
-                chessPanel.setMarker(move.getToFile(), move.getToRank(), marker);
-            }
         }
 
-        selectedPiece = clickedPiece;
+        displayMoves();
+
         updateGui();
     }
 
@@ -85,6 +76,18 @@ public class JavaChess {
         }
 
         return null;
+    }
+
+    private void displayMoves() {
+        for (Move move : Optional.ofNullable(moves).orElse(List.of())) {
+            ChessPanel.Marker marker;
+            if (board.get(move.getToFile(), move.getToRank()) != null) {
+                marker = ChessPanel.Marker.CAPTURE;
+            } else {
+                marker = ChessPanel.Marker.MOVE;
+            }
+            chessPanel.setMarker(move.getToFile(), move.getToRank(), marker);
+        }
     }
 
     private void updateGui() {
