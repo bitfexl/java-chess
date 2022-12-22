@@ -35,7 +35,6 @@ public class JavaChess {
         chessPanel.setOnClick(this::onClick);
         chessPanel.getChessBoard().reset();
         chessPanel.setBlackPov(false);
-        chessPanel.setOverlay(new TextOverlay("Hello, World!"));
 
         nextPlayer = Color.WHITE;
 
@@ -71,6 +70,10 @@ public class JavaChess {
 
         displayMoves();
         displayCheck();
+
+        if (board.isCheckMate(nextPlayer)) {
+            chessPanel.setOverlay(new TextOverlay("Game Over! " + nextPlayer.opponent() + " won!"));
+        }
 
         updateGui();
     }

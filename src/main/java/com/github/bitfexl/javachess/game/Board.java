@@ -70,6 +70,17 @@ public class Board {
     }
 
     /**
+     * Checks if a player is checkmate.
+     * @param color The player to check.
+     * @return true: checkmate, false: not checkmate;
+     */
+    public boolean isCheckMate(Color color) {
+        return getCoordinates(Piece.class, color).stream()
+                .map(c -> board.get(c).getTrueValidMoves(this, c).size())
+                .reduce(0, Integer::sum) == 0;
+    }
+
+    /**
      * Get all pieces that match a given criteria.
      * @param pieceType The piece type to get.
      * @param color The color of the piece.
@@ -77,7 +88,7 @@ public class Board {
      */
     public Set<Coordinates> getCoordinates(Class<? extends Piece> pieceType, Color color) {
         return board.keySet().stream()
-                .filter(c -> get(c).getClass() == pieceType && get(c).getColor() == color)
+                .filter(c -> pieceType.isAssignableFrom(get(c).getClass()) && get(c).getColor() == color)
                 .collect(Collectors.toUnmodifiableSet());
     }
 
