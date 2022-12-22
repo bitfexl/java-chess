@@ -27,14 +27,7 @@ public class Board {
         }
     }
 
-    private Piece[][] board;
-
-    {
-        board = new Piece[8][];
-        for (int i=0; i<8; i++) {
-            board[i] = new Piece[8];
-        }
-    }
+    private final Map<Coordinates, Piece> board = new HashMap<>();
 
     private Stack<Move> moveStack = new Stack<>();
 
@@ -57,19 +50,16 @@ public class Board {
      * @return true: in check or checkmate, false: not in check;
      */
     public boolean isInCheck(Color color) {
-        for (int f=1; f<=8; f++) {
-            for (int r=1; r<=8; r++) {
-                Piece piece = get(f, r);
-                if (piece == null || piece.getColor() == color) {
-                    continue;
-                }
+        for (Coordinates coordinates : board.keySet()) {
+            Piece piece = get(coordinates);
+            if (piece.getColor() == color) {
+                continue;
+            }
 
-                // todo: switch to coordinates completely
-                for (Move move : piece.getValidMoves(this, new Coordinates(f, r))) {
-                    Piece king = get(move.getToFile(), move.getToRank());
-                    if (king instanceof King && king.getColor() == color) {
-                        return true;
-                    }
+            for (Move move : piece.getValidMoves(this, coordinates)) {
+                Piece king = get(move.getToFile(), move.getToRank());
+                if (king instanceof King && king.getColor() == color) {
+                    return true;
                 }
             }
         }
@@ -121,11 +111,8 @@ public class Board {
      * @param other The board to copy to.
      */
     public void copyTo(Board other) {
-        for (int i=1; i<=8; i++) {
-            for (int j=1; j<=8; j++) {
-                other.set(i, j, get(i, j));
-            }
-        }
+        other.board.clear();
+        other.board.putAll(board);
 
         other.moveStack.clear();
         other.moveStack.addAll(moveStack);
@@ -151,9 +138,16 @@ public class Board {
      * @return The piece or null.
      */
     public Piece get(int file, int rank) {
-        checkInBoundsException(file);
-        checkInBoundsException(rank);
-        return board[rank-1][file-1];
+        return get(new Coordinates(file, rank));
+    }
+
+    /**
+     * Get a piece.
+     * @param coordinates The coordinates of the piece.
+     * @return The piece or null.
+     */
+    public Piece get(Coordinates coordinates) {
+        return board.get(coordinates);
     }
 
     /**
@@ -164,10 +158,22 @@ public class Board {
      * @return The piece that was there before or null.
      */
     public Piece set(int file, int rank, Piece piece) {
-        checkInBoundsException(file);
-        checkInBoundsException(rank);
-        Piece old = get(file, rank);
-        board[rank-1][file-1] = piece;
+        return set(new Coordinates(file, rank), piece);
+    }
+
+    /**
+     * Place a piece. Does not affect history.
+     * @param coordinates The coordinates of the piece.
+     * @param piece The piece.
+     * @return The piece that was there before or null.
+     */
+    public Piece set(Coordinates coordinates, Piece piece) {
+        Piece old = get(coordinates);
+        if (piece == null) {
+            board.remove(coordinates);
+        } else {
+            board.put(coordinates, piece);
+        }
         return old;
     }
 
@@ -176,6 +182,8 @@ public class Board {
      * Also resets move history.
      */
     public void reset() {
+        board.clear();
+
         set(1, 1, new Rook(Color.WHITE));
         set(2, 1, new Knight(Color.WHITE));
         set(3, 1, new Bishop(Color.WHITE));
