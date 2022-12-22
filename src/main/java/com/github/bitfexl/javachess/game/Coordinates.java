@@ -2,10 +2,19 @@ package com.github.bitfexl.javachess.game;
 
 import java.util.Objects;
 
+/**
+ * Coordinates on a check board.
+ */
 public class Coordinates {
     private final int file;
     private final int rank;
 
+    /**
+     * Init new coordinates.
+     * @param file The file (1-8).
+     * @param rank The rank (1-8).
+     * @throws IllegalArgumentException File or rank out of range.
+     */
     public Coordinates(int file, int rank) {
         Board.checkInBoundsException(file);
         Board.checkInBoundsException(rank);
