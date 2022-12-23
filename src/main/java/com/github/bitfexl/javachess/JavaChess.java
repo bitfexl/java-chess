@@ -7,6 +7,7 @@ import com.github.bitfexl.javachess.pieces.Pawn;
 import com.github.bitfexl.javachess.pieces.Piece;
 import com.github.bitfexl.javachess.ui.ChessPanel;
 import com.github.bitfexl.javachess.ui.PromotionOverlay;
+import com.github.bitfexl.javachess.ui.ResizeHandler;
 import com.github.bitfexl.javachess.ui.TextOverlay;
 
 import javax.swing.*;
@@ -20,6 +21,8 @@ public class JavaChess {
     }
 
     private final Dimension BTN_DIMENSION = new Dimension(100, 20);
+
+    private ResizeHandler resizeHandler;
 
     private Piece selectedPiece;
 
@@ -63,6 +66,16 @@ public class JavaChess {
         });
         buttonPanel.add(btnTurnBoard);
 
+        JButton btnResize = new JButton("Resize");
+        btnResize.setMaximumSize(BTN_DIMENSION);
+        btnResize.addActionListener(e -> {
+            resizeHandler.resize();
+            resizeHandler.resize();
+            resizeHandler.resize();
+            resizeHandler.resize();
+        });
+        buttonPanel.add(btnResize);
+
         chessPanel = new ChessPanel();
         chessPanel.setOnClick(this::onClick);
         chessPanel.setPreferredSize(new Dimension(400, 400));
@@ -73,6 +86,7 @@ public class JavaChess {
         window.add(chessPanel);
 
         window.pack();
+        resizeHandler = new ResizeHandler(window, 8, 8, true);
         window.setVisible(true);
     }
 
